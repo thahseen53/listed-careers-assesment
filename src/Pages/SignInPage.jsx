@@ -20,7 +20,7 @@ const SignInPage = () => {
     navigate("/dashboard");
   };
   return (
-    // <GoogleOAuthProvider clientId="717962766570-mqi10ngqr7mb7f3oq4b2cla8aq7h5jdi.apps.googleusercontent.com">
+    // <GoogleOAuthProvider">
     <div className="lg:flex">
       <div className="w-full bg-black text-white p-5 text-center md:p-8 lg:h-screen lg:flex lg:items-center lg:w-[588px]">
         <h1 className="text-3xl font-montserrat font-bold md:text-5xl lg:w-full lg:text-[72px]">
