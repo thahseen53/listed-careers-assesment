@@ -1,26 +1,30 @@
-import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
-//
+import { useState } from "react";
 
 // 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
 const SignInPage = () => {
+  const [userInformation, setUserInformation] = useState({});
   const navigate = useNavigate();
-  //     <GoogleLogin
-  //   onSuccess={credentialResponse => {
-  //     console.log(credentialResponse);
-  //   }}
-  //   onError={() => {
-  //     console.log('Login Failed');
-  //   }}
-  // />;
-  const login = () => {
+  function userInfo(e) {
+    const name = e.target.name;
+    const value = e.target.value;
+    setUserInformation((val) => ({ ...val, [name]: value }));
+  }
+  const login = (event) => {
+    event.preventDefault();
+    if (userInformation.email && userInformation.password) {
+      sessionStorage.setItem("email", JSON.stringify(userInformation.email));
+      sessionStorage.setItem(
+        "password",
+        JSON.stringify(userInformation.password)
+      );
+    }
     navigate("/dashboard");
   };
   return (
-    // <GoogleOAuthProvider clientId="717962766570-mqi10ngqr7mb7f3oq4b2cla8aq7h5jdi.apps.googleusercontent.com">
     <div className="lg:flex">
       <div className="w-full bg-black text-white p-5 text-center md:p-8 lg:h-screen lg:flex lg:items-center lg:w-[588px]">
         <h1 className="text-3xl font-montserrat font-bold md:text-5xl lg:w-full lg:text-[72px]">
@@ -37,15 +41,9 @@ const SignInPage = () => {
           </p>
           <div className="flex gap-2 font-lato">
             <div className="flex gap-2 items-center justify-center bg-white w-[180px] h-[30px] rounded-lg">
-              <span>
-                <FcGoogle />
-              </span>
-              <p
-                className="text-sm text-gray-400 md:text-lg lg:text-base cursor-pointer"
-                onClick={login}
-              >
-                sign in with google
-              </p>
+              <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_KEY}>
+                <GoogleLogin />
+              </GoogleOAuthProvider>
             </div>
             <div className="flex gap-2 items-center justify-center bg-white w-[180px] h-[30px] rounded-lg">
               <span>
@@ -56,7 +54,10 @@ const SignInPage = () => {
               </p>
             </div>
           </div>
-          <form className="bg-white flex flex-col p-5 rounded-lg  md:w-full md:p-10">
+          <form
+            className="bg-white flex flex-col p-5 rounded-lg  md:w-full md:p-10 "
+            onSubmit={(e) => login(e)}
+          >
             <label
               htmlFor="email"
               className="text-1xl p-1 md:text-3xl lg:text-[16px]"
@@ -67,6 +68,7 @@ const SignInPage = () => {
               type="email"
               name="email"
               id="email"
+              onChange={(e) => userInfo(e)}
               className="bg-[#F5F5F5] p-2 ml-1 focus:bg-[#999999] outline-none rounded-lg md:p-5 md:text-2xl lg:text-[16px] lg:p-1 lg:font-semibold "
             />
 
@@ -80,6 +82,7 @@ const SignInPage = () => {
               type="password"
               name="password"
               id="password"
+              onChange={(e) => userInfo(e)}
               className="bg-[#F5F5F5] p-2 focus:bg-[#999999] ml-1 outline-none rounded-lg md:p-5 md:text-2xl lg:text-[16px] lg:p-1 lg:font-semibold"
             />
             <a
@@ -103,7 +106,6 @@ const SignInPage = () => {
         </div>
       </div>
     </div>
-    // {/* </GoogleOAuthProvider> */}
   );
 };
 
